@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "784108878048",
+    "firebase_url": "https://blogapp-dfd14.firebaseio.com",
+    "project_id": "blogapp-dfd14",
+    "storage_bucket": "blogapp-dfd14.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:784108878048:android:637e469f9559d77354b885",
+        "android_client_info": {
+          "package_name": "com.example.blog_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "784108878048-73isnpmd7sd5sivui8kut7qts9n4h3e1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCM5VCdx71me8s5F6tazq0f7c7mIPPji2M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "784108878048-73isnpmd7sd5sivui8kut7qts9n4h3e1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
