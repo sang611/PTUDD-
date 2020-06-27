@@ -10,7 +10,7 @@ abstract class AuthImplementation{
       String username, String email, 
       String password, List<String> followingUsers,
       List<String> followedUsers, List<String> postedList,
-      List<Notification> notifyList
+      List<Notification> notifyList, List<String> chats
     }
   );
   Future<String> getCurrentUser();
@@ -56,7 +56,9 @@ class Auth implements AuthImplementation{
     @required List<String> followingUsers,
     @required List<String> followedUsers,
     @required List<String> postedList,
-    List<Notification> notifyList
+    @required List<Notification> notifyList,
+    @required List<String> chats,
+
   }) async{
     try{
       

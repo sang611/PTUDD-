@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterapp/ChatPage.dart';
 import 'package:flutterapp/ImagePostedUI.dart';
 import 'package:flutterapp/services/FireStoreService.dart';
 import 'models/User.dart';
@@ -29,7 +30,22 @@ class _ProfileFriendPage extends State<ProfileFriendPage> {
     friendUser = this.widget.friendUser;
     isFollowed = curUser.followingUsers.contains(friendUser.id);
 
-    
+    _collectionReference.collection("users")
+    .snapshots().listen((result) {
+      result.documentChanges.forEach( (value) {
+        if(value.type == DocumentChangeType.modified && 
+          value.document.data['id'] == curUser.id) {
+          User updateUser = User.fromData(value.document.data);
+          if(mounted)
+          setState(() {
+            curUser.chats = updateUser.chats;
+            //curUser.postedList.forEach((element) {print(element);});
+          });
+          
+        }
+       });
+    });
+
     super.initState();
   }
 
@@ -50,11 +66,11 @@ class _ProfileFriendPage extends State<ProfileFriendPage> {
       _fireStoreService.removeUserFollowed(id_follow, id_user);
   }
 
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
-    
-
     return Scaffold(
+      key: scaffoldKey,
       appBar: AppBar(
         title: Text(
           "Trang bạn bè",
@@ -64,16 +80,24 @@ class _ProfileFriendPage extends State<ProfileFriendPage> {
         ),
         elevation: 0,
         backgroundColor: Color(0xff09031D),
-        // actions: <Widget>[
-        //   Padding(
-        //     padding: EdgeInsets.all(8.0),
-        //     child: IconButton(
-        //       icon: Icon(Icons.more_vert), 
-        //       color: Colors.white,
-        //       onPressed: _logoutUser,
-        //       )
-        //   )
-        // ],
+        actions: <Widget>[
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: IconButton(
+              icon: Icon(Icons.message), 
+              color: Colors.white,
+              onPressed: (){
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => ChatPage(user1: curUser, user2: friendUser)
+                  )
+                );
+
+                // scaffoldKey.currentState
+                // .showBottomSheet((context) => ChatPage(user1: curUser, user2: friendUser));
+              },
+              )
+          )
+        ],
       ),
 
       body: Column(

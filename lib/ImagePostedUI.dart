@@ -119,6 +119,7 @@ class _ImagePostedUI extends State<ImagePostedUI>{
   @override
   Widget build(BuildContext context) {
     findPost().then((value) {
+      if(mounted)
             setState((){
               post = value;
             });

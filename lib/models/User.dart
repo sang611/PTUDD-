@@ -6,10 +6,11 @@ class User{
   List<String> followedUsers = [];
   List<String> postedList = [];
   List<Notify> notifyList = [];
+  List<String> chats;
 
   User({this.avatar, this.id, this.username, 
         this.email, this.password, this.followingUsers,
-        this.followedUsers ,this.postedList, this.notifyList});
+        this.followedUsers ,this.postedList, this.notifyList, this.chats});
 
   User.fromData(Map<String, dynamic> data)
       : avatar = data['avatar'],
@@ -20,7 +21,8 @@ class User{
         followingUsers = (data['followingUsers'] as List).map((ele) => ele.toString()).toList(),
         followedUsers = (data['followedUsers'] as List).map((ele) => ele.toString()).toList(),
         postedList = (data['postedList'] as List).map((ele) => ele.toString()).toList(),
-        notifyList = (data['notifyList'] as List).map((ele) => Notify.map(ele)).toList();
+        notifyList = (data['notifyList'] as List).map((ele) => Notify.map(ele)).toList(),
+        chats = (data['chats'] as List).map((ele) => ele.toString()).toList();
 
   Map<String, dynamic> toJSON() {
     return {
@@ -31,7 +33,8 @@ class User{
       'followingUsers': followingUsers,
       'followedUsers': followedUsers,
       'postedList': postedList,
-      'notifyList': notifyList
+      'notifyList': notifyList,
+      'chats': chats
     };
   }
 }

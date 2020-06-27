@@ -70,7 +70,7 @@ class _CommentCardUI extends State<CommentCardUI> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Container(
-                    padding: EdgeInsets.all(8),
+                    padding: EdgeInsets.all(8.0),
                     margin: EdgeInsets.only(bottom: 5.0),
                     decoration: BoxDecoration(
                       color: Colors.grey[300],

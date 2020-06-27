@@ -54,7 +54,7 @@ class _ProfilePage extends State<ProfilePage> {
     .snapshots().listen((result) {
       result.documentChanges.forEach( (value) {
         if(value.type == DocumentChangeType.modified && 
-          value.document.data['id'] == curUser.id) {
+          value.document.documentID == curUser.id) {
           User updateUser = User.fromData(value.document.data);
           if(mounted)
           setState(() {

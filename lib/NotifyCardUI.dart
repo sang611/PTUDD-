@@ -37,10 +37,10 @@ class _NotifyCardUI extends State<NotifyCardUI>{
     
     
 
-    setState(() {
+    
       notify = this.widget.notify;
       seen = notify.seen;
-    });
+    
 
     fireStoreService.getUser(this.widget.notify.idUserA).then((value){
       setState(() {

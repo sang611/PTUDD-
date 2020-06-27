@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:flutter/material.dart";
 import 'package:flutterapp/ProfilePage.dart';
@@ -35,6 +37,7 @@ int currentTabIndex = 0;
  ProfilePage profilePage = ProfilePage();
  User curUser;
  int notifyNum;
+ var theAvatar;
 
   @override
   void initState() {
@@ -44,6 +47,7 @@ int currentTabIndex = 0;
      widget.auth.populateCurrentUser().then((user){
       setState(() {
         curUser = user;
+        theAvatar = NetworkImage(curUser.avatar);
         notifyNum = curUser.notifyList.where((element) => !element.seen).length;
       });
     });
@@ -85,8 +89,17 @@ int currentTabIndex = 0;
        });
     });
      
+    
 
     super.initState();
+  }
+
+  @override
+    void didChangeDependencies() {
+    if(theAvatar!=null)
+    precacheImage(theAvatar.image, context);
+    
+    super.didChangeDependencies();
   }
 
   
@@ -200,7 +213,9 @@ int currentTabIndex = 0;
           BottomNavigationBarItem(
             //icon: Icon(Icons.person),
             icon: curUser != null ? CircleAvatar(
-                    backgroundImage: NetworkImage(curUser.avatar),
+              
+                    backgroundImage: theAvatar,
+                    //backgroundImage: NetworkImage(curUser.avatar),
                     radius: 15.0,
                   ) : CircularProgressIndicator(
                     valueColor:new AlwaysStoppedAnimation<Color>(Colors.black87),

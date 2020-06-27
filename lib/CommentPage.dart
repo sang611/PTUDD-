@@ -75,8 +75,6 @@ class _CommentPage extends State<CommentPage> {
     String time = formatTime.format(dbTimeKey);
 
     Comment newComment = Comment(curUser.id, text, urlImg, date, time);
-
-    
     setState(() {
       listComments.add(newComment);
     });
@@ -99,16 +97,12 @@ class _CommentPage extends State<CommentPage> {
       final StorageReference postImageRef = FirebaseStorage.instance.ref().child("Post comment image");
       var timeKey = new DateTime.now();
       final StorageUploadTask uploadTask = postImageRef.child(timeKey.toString() + ".jpg").putFile(commentImage);
-
       var imageUrl = await (await uploadTask.onComplete).ref.getDownloadURL();
 
       setState(() {
         urlImg = imageUrl.toString();
-        print(urlImg);
+        //print(urlImg);
       });
-      
-      //saveToDatabase(url);
-
   }
 
   final picker = ImagePicker();

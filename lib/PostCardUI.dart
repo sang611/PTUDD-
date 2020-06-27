@@ -73,7 +73,6 @@ class _PostCardUI extends State<PostCardUI> {
     if(this.widget.post.type == 2) {
       _controller = VideoPlayerController.network(this.widget.post.image);
       _initializeVideoPlayerFuture = _controller.initialize();
-    
     }
 
     _fireStoreService.getUser(this.widget.post.user_id).then((_user){

@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutterapp/models/Chat.dart';
+import 'package:flutterapp/models/Comment.dart';
 import 'package:flutterapp/models/Notify.dart';
 import 'package:flutterapp/models/Post.dart';
 import '../models/User.dart';
@@ -111,22 +113,57 @@ class FireStoreService {
 
 
 
-  Future createPost(Post post) async {
+  // Future createPost(Post post) async {
+  //     try {
+  //       await _collectionReference.collection("posts").add(post.toJSON());
+  //       print("added");
+  //     } catch (e) {
+  //       return e.message;
+  //     }
+  // }
+
+  // Future getAllPosts(List<String> followingUsers) async {
+  //       List listPosts;
+  //       await _collectionReference.collection("posts").getDocuments().then((querySnapshot){
+  //         listPosts = querySnapshot.documents.map((snapshot) => Post.fromData(snapshot.documentID, snapshot.data))
+  //         .where((mappedItem) => followingUsers.contains(mappedItem.user_id)).toList();
+  //       });
+  //     return listPosts;
+  // }
+
+  Future createChat(Chat chat) async {
       try {
-        await _collectionReference.collection("posts").add(post.toJSON());
-        print("added");
+        await _collectionReference.collection("chats").add(chat.toJSON()).then((value) async {
+          await _collectionReference.collection("users")
+          .document(chat.idUser1)
+          .updateData({ 'chats': FieldValue.arrayUnion([value.documentID]) });
+
+          await _collectionReference.collection("users")
+          .document(chat.idUser2)
+          .updateData({ 'chats': FieldValue.arrayUnion([value.documentID]) });
+        });
+        //print("added");
       } catch (e) {
         return e.message;
       }
   }
 
-  Future getAllPosts(List<String> followingUsers) async {
-        List listPosts;
-        await _collectionReference.collection("posts").getDocuments().then((querySnapshot){
-          listPosts = querySnapshot.documents.map((snapshot) => Post.fromData(snapshot.documentID, snapshot.data))
-          .where((mappedItem) => followingUsers.contains(mappedItem.user_id)).toList();
-        });
-      return listPosts;
+  Future addMessage(String idChat, Comment mes) async {
+    try {
+      await _collectionReference.collection("chats").document(idChat)
+            .updateData({'messageList': FieldValue.arrayUnion([mes.toJSON()])});
+    } catch(e) {
+      return e.message;
+    }
+  }
+
+  Future getChat(String idChat) async {
+    try {
+      var chatData = await _collectionReference.collection("chats").document(idChat).get();
+      return Chat.fromData(chatData.data);
+    } catch (e) {
+      return e.message;
+    }
   }
   
   Future setLike(Post post) async {
