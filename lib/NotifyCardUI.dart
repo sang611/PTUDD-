@@ -34,25 +34,25 @@ class _NotifyCardUI extends State<NotifyCardUI>{
 
   @override
   void initState() {
-    
-    
 
-    
-      notify = this.widget.notify;
-      seen = notify.seen;
+    notify = this.widget.notify;
+    seen = notify.seen;
     
 
     fireStoreService.getUser(this.widget.notify.idUserA).then((value){
+      if(mounted)
       setState(() {
         userA = value;
       });
     });
     fireStoreService.getUser(this.widget.notify.idUserB).then((value){
+      if(mounted)
       setState(() {
         userB = value;
       });
     });
 
+    if(notify.postId != "")
     databaseReference.child("Post").child(notify.postId).once().then((value) {
       setState((){
         post = Post.fromSnapshot(value);
@@ -77,6 +77,23 @@ class _NotifyCardUI extends State<NotifyCardUI>{
   void dispose() {
     super.dispose();
   }
+
+  String notifyContent(){
+    switch(this.widget.notify.type){
+      case 1: {
+        return " đã thích một bài viết của bạn.";
+      }
+      case 2: {
+        return " đã bình luận về một bài viết của bạn.";
+      }
+      case 3: {
+        return " đã chia sẻ một bài viết của bạn.";
+      }
+      case 4: {
+        return " đã bắt đầu theo dõi bạn.";
+      }
+    }
+  }
   
 
   Widget buildTextNotify(User userA, Notify notify) {
@@ -100,8 +117,7 @@ class _NotifyCardUI extends State<NotifyCardUI>{
                 style: TextStyle(
                   fontSize: 15.5
                 ),
-                text: (this.widget.notify.type == 1) ? " đã thích một bài viết của bạn." 
-                                         : " đã bình luận về một bài viết của bạn."
+                text: notifyContent()
               )
             ]
            
@@ -123,7 +139,7 @@ class _NotifyCardUI extends State<NotifyCardUI>{
 
   @override
   Widget build(BuildContext context) {
-    return (userA != null && post != null && userB != null) ? 
+    return (userA != null && userB != null) ?
           Container(
             decoration: BoxDecoration(
               color: !this.widget.notify.seen ? Colors.lightBlue[50] : Colors.white10,
@@ -150,15 +166,8 @@ class _NotifyCardUI extends State<NotifyCardUI>{
                 ],
               ),
               onTap: (){
-                // fireStoreService.updateNotifyList(userB.id, notify).then((value){
-                  
-                //   Navigator.push(context, MaterialPageRoute(
-                //     builder: (context) => 
-                //     PostPersonalPage(post: post, curUser: userB)
-                // ));
-                
-                // });
 
+              if(post != null)
                 Navigator.push(context, MaterialPageRoute(
                     builder: (context) => 
                     PostPersonalPage(post: post, curUser: userB)

@@ -1,6 +1,8 @@
 import "package:flutter/material.dart";
 import 'package:flutterapp/ProfileFriendPage.dart';
+import 'package:intl/intl.dart';
 
+import 'models/Notify.dart';
 import 'models/User.dart';
 import 'services/FireStoreService.dart';
 class UserListCardUI extends StatefulWidget {
@@ -21,12 +23,24 @@ class _UserListCardUI extends State<UserListCardUI> {
   FireStoreService _fireStoreService = FireStoreService();
   bool isFollowed;
 
+  addNotify(int i){
+    var dbTimeKey = new DateTime.now();
+    var formatDate = new DateFormat("MMM d, yyyy");
+    var formatTime = new DateFormat("EEEE, hh:mm:ss:SS aaa");
+    String date = formatDate.format(dbTimeKey);
+    String time = formatTime.format(dbTimeKey);
+    Notify notify = Notify(curUser.id, user.id, i, "", date, time, false);
+    _fireStoreService.addNotifyList(user.id, notify);
+  }
+
   setUserFollow(String id_user, String id_follow) {
       setState((){
         isFollowed = !isFollowed;
       }) ;
       _fireStoreService.addUserFollowing(id_user, id_follow);
       _fireStoreService.addUserFollowed(id_follow, id_user);
+
+      addNotify(4);
 
   }
 

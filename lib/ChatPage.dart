@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutterapp/services/FireStoreService.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-
 import 'models/Chat.dart';
 import 'models/Comment.dart';
 import 'models/User.dart';
@@ -34,6 +33,7 @@ class _ChatPage extends State<ChatPage> {
   FireStoreService fireStoreService = FireStoreService();
   final Firestore _collectionReference = Firestore.instance;
   final TextEditingController eCtrl = new TextEditingController();
+  var theImage;
   //List<Comment> messageList;
   @override
   void initState() {
@@ -77,8 +77,12 @@ class _ChatPage extends State<ChatPage> {
         }
        });
     });
+
+
     super.initState();
   }
+
+
 
   addMessage(String text) async{
     eCtrl.clear();
@@ -138,7 +142,7 @@ class _ChatPage extends State<ChatPage> {
             Padding(
             padding: EdgeInsets.symmetric(horizontal: 0.0),
             child: ListView.builder(
-                cacheExtent: pow(10, 10).toDouble(),
+                cacheExtent: pow(10, 9).toDouble(),
                 itemCount: messageList.length,
                 itemBuilder: (context, index) {
                   if(messageList[index].id_user == user1.id)

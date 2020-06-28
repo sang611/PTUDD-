@@ -1,17 +1,13 @@
+import 'dart:async';
 import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-
 import 'PostCardUI.dart';
 import 'services/Authentication.dart';
-
 import 'models/Post.dart';
 import 'models/User.dart';
 import 'services/FireStoreService.dart';
-
-
 
 class HomePage extends StatefulWidget{
   const HomePage({Key key, this.auth, this.curUser}) : super(key: key);
@@ -33,8 +29,10 @@ class _HomePage extends State<HomePage>{
   User curUser = new User();
   List<Post> postList = [];
   List<String> followUsers = [];
- 
-  
+  bool isLoadMore = true;
+  int perPage = 5;
+  var _controller = ScrollController();
+
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
   
   FireStoreService _fireStoreService = FireStoreService();
@@ -47,12 +45,7 @@ class _HomePage extends State<HomePage>{
 
 	  WidgetsBinding.instance.addPostFrameCallback((_) => _refreshIndicatorKey.currentState.show());
 
-    // widget.auth.populateCurrentUser().then((user){
-    //   if(mounted)
-    //   setState(() {
-    //     curUser = user;
-    //   });
-    // });
+
     curUser = this.widget.curUser;
 
     
@@ -132,8 +125,8 @@ class _HomePage extends State<HomePage>{
 
   
 
-	Future<Null> _refresh() {
-    return 
+	Future<void> _refresh() {
+    return
     widget.auth.populateCurrentUser().then((_user) {
 			curUser = _user;
 			setState(() {
@@ -141,9 +134,10 @@ class _HomePage extends State<HomePage>{
 				//print(followUsers);
 			});
 			postList.clear();
-      
+
       DatabaseReference postsRef = FirebaseDatabase.instance.reference().child("Post");
 
+      if(isLoadMore)
       postsRef.onChildAdded.listen((Event event){
         if(followUsers.contains(event.snapshot.value['user_id']))
         {
@@ -151,12 +145,21 @@ class _HomePage extends State<HomePage>{
           if(mounted)
           setState(() {
             postList.add(newPost);
+            if(postList.length % perPage == 0){
+              setState(() {
+                isLoadMore = false;
+              });
+            }
           });
         }
       });
 
-      
+
+
 		});
+
+
+
 	 }
 
   @override
@@ -197,6 +200,7 @@ class _HomePage extends State<HomePage>{
           child: Text("Theo dõi bạn bè để cùng chia sẻ trạng thái") 
         ): 
         new ListView.builder(
+          controller: _controller,
           cacheExtent: pow(10, 10).toDouble(),
           itemCount: postList.length,
           itemBuilder: (_, index) {

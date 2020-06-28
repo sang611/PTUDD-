@@ -19,7 +19,7 @@ class CommentCardUI extends StatefulWidget {
 
 class _CommentCardUI extends State<CommentCardUI> {
   User user = User();
-  File commentImage;
+  var theImage;
   FireStoreService fireStoreService = FireStoreService();
 
   @override
@@ -34,8 +34,15 @@ class _CommentCardUI extends State<CommentCardUI> {
       });
     });
 
+    theImage = Image.network(this.widget.comment.image);
     super.initState();
 
+  }
+
+  @override
+  void didChangeDependencies() {
+    precacheImage(theImage.image, context);
+    super.didChangeDependencies();
   }
 
   
@@ -95,10 +102,10 @@ class _CommentCardUI extends State<CommentCardUI> {
                   //SizedBox(height: 5.0),
                   this.widget.comment.image != "" ? Container(
                     margin: EdgeInsets.only(bottom: 5.0),
-                    width: 160,
-                    height: 90,
+                    width: 240,
+                    height: 135,
                     alignment: Alignment.topLeft,
-                    child: Image.network(this.widget.comment.image) ,
+                    child: theImage ,
                   ) : SizedBox(height: 0),
                   
                   Padding(

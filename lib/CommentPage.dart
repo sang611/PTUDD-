@@ -8,7 +8,6 @@ import 'package:flutterapp/CommentCardUI.dart';
 import 'package:flutterapp/services/FireStoreService.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'models/Comment.dart';
 import 'models/Notify.dart';
 import 'models/Post.dart';

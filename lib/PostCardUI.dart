@@ -131,13 +131,13 @@ class _PostCardUI extends State<PostCardUI> {
     super.dispose();
   }
 
-  addNotify(){
+  addNotify(int i){
     var dbTimeKey = new DateTime.now();
     var formatDate = new DateFormat("MMM d, yyyy");
     var formatTime = new DateFormat("EEEE, hh:mm:ss:SS aaa");
     String date = formatDate.format(dbTimeKey);
     String time = formatTime.format(dbTimeKey);
-    Notify notify = Notify(curUser.id, userOfPost.id, 1, this.widget.post.id, date, time, false);
+    Notify notify = Notify(curUser.id, userOfPost.id, i, this.widget.post.id, date, time, false);
     _fireStoreService.addNotifyList(userOfPost.id, notify);
   }
   
@@ -160,7 +160,7 @@ class _PostCardUI extends State<PostCardUI> {
       });
       //post.like ++;
       if(curUser.id != userOfPost.id)
-      addNotify();
+      addNotify(1);
     }
 
     if(mounted)
@@ -215,6 +215,7 @@ class _PostCardUI extends State<PostCardUI> {
     databaseReference.child("Post").child(post.id).update({"sharedNum": post.sharedNum+1});
     databaseReference.child("Post").push().set(sharedPost.toJSON()).then((v){
       dialogBox.information(context, "Đã chia sẻ bài viết", "Bạn bè có thể nhìn thấy chia sẻ của bạn");
+      addNotify(3);
     });
   }
   
