@@ -59,7 +59,10 @@ class _LoginRegisterPage extends State<LoginRegisterPage>{
               email: _email,
               password: _password,
               followingUsers: [],
-              postedList: []
+              followedUsers: [],
+              postedList: [],
+              notifyList: [],
+              chats: [],
             );
             
           dialogBox.information(context,
@@ -176,7 +179,7 @@ class _LoginRegisterPage extends State<LoginRegisterPage>{
       
          new TextFormField(
               decoration: new InputDecoration(
-                labelText: 'Email hoặc SĐT',
+                labelText: 'Email',
               ),
 
               validator: (value){

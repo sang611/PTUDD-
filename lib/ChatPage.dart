@@ -29,7 +29,7 @@ class _ChatPage extends State<ChatPage> {
   User user1, user2;
   Chat chat;
   String idChat;
-  File mesImage; String urlImg;
+  File mesImage; String urlImg = "";
   FireStoreService fireStoreService = FireStoreService();
   final Firestore _collectionReference = Firestore.instance;
   final TextEditingController eCtrl = new TextEditingController();
@@ -47,11 +47,12 @@ class _ChatPage extends State<ChatPage> {
     print(c1.intersection(c2).length);
 
     if(c1.intersection(c2).length == 0){
-      fireStoreService.createChat(Chat(user1.id, user2.id, [])).whenComplete(() {
-        fireStoreService.getChat(c1.intersection(c2).single).then((value) {
+      fireStoreService.createChat(Chat(user1.id, user2.id, [])).then((_idChat) {
+        print(_idChat);
+        fireStoreService.getChat(_idChat).then((value) {
           setState((){
             chat = value;
-            idChat = c1.intersection(c2).single;
+            idChat = _idChat;
           });
         });
       });
@@ -67,7 +68,7 @@ class _ChatPage extends State<ChatPage> {
     _collectionReference.collection("chats")
     .snapshots().listen((result) {
       result.documentChanges.forEach( (value) {
-        if(value.document.documentID == c1.intersection(c2).single &&
+        if(value.document.documentID == idChat &&
            value.type == DocumentChangeType.modified ) {
           Chat _chat = Chat.fromData(value.document.data);
           if(mounted)

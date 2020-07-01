@@ -61,6 +61,7 @@ class _PostCardUI extends State<PostCardUI> {
     .equalTo(this.widget.post.id)
     .onChildChanged.listen((Event e) {
       Post updatePost = Post.fromSnapshot(e.snapshot);
+      print("update post");
       if(mounted)
       setState(() {
         like = updatePost.like;
@@ -189,8 +190,6 @@ class _PostCardUI extends State<PostCardUI> {
     .update({'usersLiked' : listUsersLiked });
   }
 
-  
-
   sharePost(){
     Post post = this.widget.post;
     DatabaseReference databaseReference = FirebaseDatabase.instance.reference();
@@ -224,7 +223,7 @@ class _PostCardUI extends State<PostCardUI> {
   Widget build(BuildContext context) {
     Post post = this.widget.post;
     int commentNum;
-    commentNum = post.listComments.length - 1;
+    commentNum = post.listComments.length-1;
     int sharedNum = post.sharedNum;
 
     String tile = "";
@@ -331,23 +330,18 @@ class _PostCardUI extends State<PostCardUI> {
             post.type == 1 ? GestureDetector(
               onDoubleTap: setLike,
               child: Center(
-              //   child: Image.network(
-              //   this.widget.post.image,
-              //   fit: BoxFit.fill
-                
-              // )
               child: theImage!= null ? theImage : SizedBox()
               )
-              
-              
             ) : 
-            Chewie(
+            (
+                _controller!= null ? Chewie(
               controller: ChewieController(
               videoPlayerController: _controller,
               aspectRatio: _controller.value.aspectRatio,
               autoPlay: false,
               looping: false,
             )
+            ) : CircularProgressIndicator()
             ),
             
           

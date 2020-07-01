@@ -36,7 +36,6 @@ class Auth implements AuthImplementation{
   Future populateCurrentUser() async {
     FirebaseUser user = await _firebaseAuth.currentUser();
     User _currentUser;
-    
       _currentUser = await _fireStoreService.getUser(user.uid);
     
     print(_currentUser);
@@ -61,7 +60,6 @@ class Auth implements AuthImplementation{
 
   }) async{
     try{
-      
       var authResult = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
@@ -76,7 +74,8 @@ class Auth implements AuthImplementation{
             followingUsers: [],
             followedUsers: [],
             postedList: [],
-            notifyList: []
+            notifyList: [],
+            chats: [],
            )
       );
 

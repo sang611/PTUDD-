@@ -44,35 +44,38 @@ int currentTabIndex = 0;
     
     
 
-     widget.auth.populateCurrentUser().then((user){
+    widget.auth.populateCurrentUser().then((user){
       setState(() {
         curUser = user;
         theAvatar = NetworkImage(curUser.avatar);
         notifyNum = curUser.notifyList.where((element) => !element.seen).length;
+
+        photoUploadPage = PhotoUploadPage(
+          curUser: curUser,
+          //onSignedOut: _logoutUser,
+        );
+        homePage = HomePage(
+          auth: this.widget.auth,
+          curUser: curUser,
+        );
+        usersListPage = UsersListPage(
+          curUser: curUser,
+          //onSignedOut: widget.onSignedOut
+        );
+        notificationPage = NotificationPage(
+          curUser: curUser,
+          //onSignedOut: widget.onSignedOut
+        );
+        profilePage = ProfilePage(
+            auth: widget.auth,
+            curUser: curUser,
+            onSignedOut: widget.onSignedOut
+        );
       });
     });
 
     
-      photoUploadPage = PhotoUploadPage(
-                        auth: widget.auth,
-                        //onSignedOut: _logoutUser,
-                      );
-      homePage = HomePage(
-                  auth: this.widget.auth,
-                  curUser: curUser,
-                );
-      usersListPage = UsersListPage(
-                  auth: widget.auth,
-                  //onSignedOut: widget.onSignedOut
-                );
-      notificationPage = NotificationPage(
-                  auth: widget.auth,
-                  //onSignedOut: widget.onSignedOut
-                );
-      profilePage = ProfilePage(
-        auth: widget.auth,
-        onSignedOut: widget.onSignedOut
-      );
+
 
     final Firestore _collectionReference = Firestore.instance;
     _collectionReference.collection("users")
@@ -143,17 +146,18 @@ int currentTabIndex = 0;
           new Offstage(
             offstage: currentTabIndex!=1,
             child: new TickerMode(enabled: currentTabIndex == 1,
-            child: new MaterialApp(home: usersListPage))
+            child: curUser!=null ? new MaterialApp(home: usersListPage) : Center(child: CircularProgressIndicator(),)
+            )
           ),
           new Offstage(
             offstage: currentTabIndex!=2,
             child: new TickerMode(enabled: currentTabIndex == 2,
-            child: new MaterialApp(home: photoUploadPage))
+            child: curUser!=null ? new MaterialApp(home: photoUploadPage) : Center(child: CircularProgressIndicator(),))
           ),
           new Offstage(
             offstage: currentTabIndex!=3,
             child: new TickerMode(enabled: currentTabIndex == 3,
-            child: new MaterialApp(home: notificationPage)
+            child: curUser!=null ? new MaterialApp(home: notificationPage) : Center(child: CircularProgressIndicator(),)
           ),
           ),
           new Offstage(

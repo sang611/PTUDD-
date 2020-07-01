@@ -6,9 +6,9 @@ import 'models/Notify.dart';
 import 'models/User.dart';
 
 class NotificationPage extends StatefulWidget {
-  final AuthImplementation auth;
-
-  const NotificationPage({Key key, this.auth}) : super(key: key);
+  //final AuthImplementation auth;
+  final User curUser;
+  const NotificationPage({ Key key, this.curUser }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -23,16 +23,16 @@ class _NotificationPage extends State<NotificationPage> {
 
   @override
   void initState() {
-    
-    
+    curUser = this.widget.curUser;
+    notifyList = this.widget.curUser.notifyList;
 
-    widget.auth.populateCurrentUser().then((user){
-      if(mounted)
-      setState(() {
-        curUser = user;
-        notifyList = curUser.notifyList;
-      });
-    });
+//    widget.auth.populateCurrentUser().then((user){
+//      if(mounted)
+//      setState(() {
+//        curUser = user;
+//        notifyList = curUser.notifyList;
+//      });
+//    });
 
     // _collectionReference.collection("users")
     // .where("id", isEqualTo: curUser.id)
@@ -96,7 +96,7 @@ class _NotificationPage extends State<NotificationPage> {
             ListView.builder
             (
               itemBuilder: (context, index) {
-              return NotifyCardUI(notify: notifyList[index], curUser: curUser, scaffoldKey: scaffoldKey);
+              return NotifyCardUI(notify: List.from(notifyList.reversed)[index], curUser: curUser, scaffoldKey: scaffoldKey);
             },
               itemCount: notifyList.length,
             ) : SizedBox(height: 0)

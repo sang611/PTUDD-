@@ -16,9 +16,10 @@ import 'services/FireStoreService.dart';
 
 class PhotoUploadPage extends StatefulWidget{
   
-  const PhotoUploadPage({Key key, this.auth}) : super(key: key);
+  const PhotoUploadPage({Key key, this.curUser}) : super(key: key);
 
-  final AuthImplementation auth;
+    final User curUser;
+  //final AuthImplementation auth;
   //final VoidCallback onSignedOut;
 
   @override
@@ -43,12 +44,13 @@ class _PhotoUploadState extends State<PhotoUploadPage>{
   void initState() {
     
 
-    widget.auth.populateCurrentUser().then((user){
-      setState(() {
-        curUser = user;
-      });
-      
-    });
+//    widget.auth.populateCurrentUser().then((user){
+//      setState(() {
+//        curUser = user;
+//      });
+//
+//    });
+      curUser = this.widget.curUser;
 
     super.initState();
   }

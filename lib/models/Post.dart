@@ -62,7 +62,7 @@ class Post{
     shareFrom = snapshot.value['shareFrom'];
   }
 
-  Post.fromData(String id, Map<String, dynamic> data)
+  Post.fromData(String id, Map<dynamic, dynamic> data)
       : id = id,
         image = data['image'],
         description = data['description'],
@@ -70,7 +70,7 @@ class Post{
         time = data['time'],
         like = data['like'],
         user_id = data['user_id'],
-        listComments = (data['followingUsers']!=null ? data['followingUsers'] as List : []).map((ele) => (Comment.map(ele))).toList(),
+        listComments = (data['comments']!=null ? data['comments'] as List : []).map((ele) => (Comment.map(ele))).toList(),
         listUserLiked = (data['usersLiked']!=null ? data['usersLiked'] as List : []).map((ele) => (ele.toString())).toList(),
         sharedNum = data['sharedNum'],
         type = data['type'],

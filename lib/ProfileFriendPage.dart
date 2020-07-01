@@ -39,11 +39,23 @@ class _ProfileFriendPage extends State<ProfileFriendPage> {
           if(mounted)
           setState(() {
             curUser.chats = updateUser.chats;
-            //curUser.postedList.forEach((element) {print(element);});
           });
-          
         }
        });
+    });
+
+    _collectionReference.collection("users")
+        .snapshots().listen((result) {
+      result.documentChanges.forEach( (value) {
+        if(value.type == DocumentChangeType.modified &&
+            value.document.data['id'] == friendUser.id) {
+          User updateUser = User.fromData(value.document.data);
+          if(mounted)
+            setState(() {
+              friendUser.chats = updateUser.chats;
+            });
+        }
+      });
     });
 
     super.initState();

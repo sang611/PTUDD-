@@ -7,10 +7,11 @@ import 'services/FireStoreService.dart';
 import 'models/User.dart';
 
 class UsersListPage extends StatefulWidget{
-  final AuthImplementation auth;
+  //final AuthImplementation auth;
+  final User curUser;
   //final  VoidCallback onSignedOut;
 
-  const UsersListPage({Key key, this.auth}) : super(key: key);
+  const UsersListPage({Key key, this.curUser }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -27,11 +28,12 @@ class _UsersListPage extends State<UsersListPage> {
   void initState() {
     
 
-    widget.auth.populateCurrentUser().then((user){
-      setState(() {
-        curUser = user;
-      });
-    });
+//    widget.auth.populateCurrentUser().then((user){
+//      setState(() {
+//        curUser = user;
+//      });
+//    });
+    curUser = this.widget.curUser;
 
     _collectionReference.collection("users")
     .snapshots().listen((result) {
@@ -52,6 +54,7 @@ class _UsersListPage extends State<UsersListPage> {
   
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       resizeToAvoidBottomInset: false,

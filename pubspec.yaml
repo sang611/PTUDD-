@@ -32,7 +32,6 @@ dependencies:
   cloud_firestore:
   get_it: ^4.0.1
   image_picker: ^0.6.7
-  camera: ^0.5.8+2
   video_player:
   chewie:
   flutter_svg: ^0.17.1

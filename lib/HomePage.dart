@@ -44,8 +44,6 @@ class _HomePage extends State<HomePage>{
     
 
 	  WidgetsBinding.instance.addPostFrameCallback((_) => _refreshIndicatorKey.currentState.show());
-
-
     curUser = this.widget.curUser;
 
     
@@ -107,9 +105,6 @@ class _HomePage extends State<HomePage>{
       });
     });
 
-    
-
-
     super.initState();
   }
 
@@ -117,8 +112,8 @@ class _HomePage extends State<HomePage>{
     postList.sort((a, b){
       int order = a.date.compareTo(b.date);
       if(order == 0)
-        order = b.time.compareTo(a.time);
-        return order;
+        order = a.time.compareTo(b.time);
+      return order;
     }
     );
   }
@@ -126,40 +121,54 @@ class _HomePage extends State<HomePage>{
   
 
 	Future<void> _refresh() {
+    setState(() {
+      isLoadMore = true;
+    });
+    DatabaseReference postsRef = FirebaseDatabase.instance.reference().child("Post");
     return
     widget.auth.populateCurrentUser().then((_user) {
 			curUser = _user;
 			setState(() {
 				followUsers = curUser.followingUsers;
-				//print(followUsers);
+        postsRef.once().then((DataSnapshot snap) {
+          var KEYS = snap.value.keys;
+          var DATA = snap.value;
+
+          for(var individualKey in KEYS){
+            if(followUsers.contains(DATA[individualKey]['user_id']))
+            {
+              print("add");
+              Post newPost = new Post.fromData(individualKey, DATA[individualKey]);
+              if(mounted)
+                setState(() {
+                  postList.add(newPost);
+                });
+            }
+          }
+          sort(postList);
+
+        });
 			});
 			postList.clear();
 
-      DatabaseReference postsRef = FirebaseDatabase.instance.reference().child("Post");
-
-      if(isLoadMore)
-      postsRef.onChildAdded.listen((Event event){
-        if(followUsers.contains(event.snapshot.value['user_id']))
-        {
-          Post newPost = new Post.fromSnapshot(event.snapshot);
-          if(mounted)
-          setState(() {
-            postList.add(newPost);
-            if(postList.length % perPage == 0){
-              setState(() {
-                isLoadMore = false;
-              });
-            }
-          });
-        }
-      });
-
+//			if(isLoadMore)
+//      postsRef.onChildAdded.listen((Event event){
+//        if(followUsers.contains(event.snapshot.value['user_id']))
+//        {
+//          print("add post");
+//          Post newPost = new Post.fromSnapshot(event.snapshot);
+//          if(mounted)
+//          setState(() {
+//            postList.add(newPost);
+//          });
+//        }
+//      });
+//			setState(() {
+//			  isLoadMore = false;
+//			});
 
 
 		});
-
-
-
 	 }
 
   @override

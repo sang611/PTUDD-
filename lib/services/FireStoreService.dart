@@ -131,8 +131,9 @@ class FireStoreService {
   //     return listPosts;
   // }
 
-  Future createChat(Chat chat) async {
+  Future<String> createChat(Chat chat) async {
       try {
+        String idChat;
         await _collectionReference.collection("chats").add(chat.toJSON()).then((value) async {
           await _collectionReference.collection("users")
           .document(chat.idUser1)
@@ -141,7 +142,10 @@ class FireStoreService {
           await _collectionReference.collection("users")
           .document(chat.idUser2)
           .updateData({ 'chats': FieldValue.arrayUnion([value.documentID]) });
+
+          idChat = value.documentID;
         });
+        return idChat;
         //print("added");
       } catch (e) {
         return e.message;

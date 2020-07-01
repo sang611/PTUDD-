@@ -54,6 +54,7 @@ class _NotifyCardUI extends State<NotifyCardUI>{
 
     if(notify.postId != "")
     databaseReference.child("Post").child(notify.postId).once().then((value) {
+      if(mounted)
       setState((){
         post = Post.fromSnapshot(value);
       });
@@ -64,6 +65,7 @@ class _NotifyCardUI extends State<NotifyCardUI>{
 
   Future findPost(id) async{
     await databaseReference.child("Post").child(notify.postId).once().then((value) {
+      if(mounted)
       setState((){
         post = Post.fromSnapshot(value);
         print(post.like);
